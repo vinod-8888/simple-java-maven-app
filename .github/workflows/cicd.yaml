@@ -7,11 +7,12 @@ on:
  workflow_dispatch:
         
 jobs:
-  build:
+  test:
+     name: run test cases
      runs-on: ubuntu-latest
      container:
           image: vinod99998888/java-v17.0.9-maven-v3.8.6:latest
-      steps:    
+     steps:    
         - uses: actions/checkout@v4 
 
         - name: run unit test cases
@@ -19,11 +20,12 @@ jobs:
              mvn clean test
              ls -l "$GITHUB_WORKSPACE"
 
-  test:
+  build:
+     name: build the maven application
      runs-on: ubuntu-latest
      container:
         image: vinod99998888/java-v17.0.9-maven-v3.8.6:latest
-     needs: build
+     needs: test
      steps:
        - uses: actions/checkout@v4   
        
