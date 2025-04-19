@@ -72,12 +72,14 @@ jobs:
        - name: build that application using maven
          run: |
              mvn clean package -DskipTests
+             mkdir -p upload
+             cp -r target upload/
 
        - name: upload artifacts
          uses: actions/upload-artifact@v4
          with:
             name: jar-file
-            path: ./target/
+            path: ./upload/
             retention-days: 1     
 
   deliver:
