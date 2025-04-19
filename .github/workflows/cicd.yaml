@@ -30,7 +30,7 @@ jobs:
             sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
             echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
             echo "/opt/maven/bin" >> $GITHUB_PATH    
-            
+
         - name: run unit test cases
           run: |
              mvn clean test
@@ -48,6 +48,8 @@ jobs:
        
        - name: build that maven application
          run: |
+             java --version
+             mvn --version
              mvn clean package -DskipTests
              ls -l "$GITHUB_WORKSPACE"
           
