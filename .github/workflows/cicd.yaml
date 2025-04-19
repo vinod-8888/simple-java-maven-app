@@ -76,7 +76,7 @@ jobs:
             path: ./target/
             retention-days: 1     
 
-  deliver:   # inn this stage we will execute our jar file
+  deliver:   # in this stage we will execute our jar file
      name: run jar file 
      needs:
         - test
