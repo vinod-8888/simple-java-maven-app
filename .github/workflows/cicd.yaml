@@ -1,0 +1,27 @@
+name: cicd for github actions
+on:
+ push:
+   branches: ["master"]
+jobs:
+  build:
+     runs-on: github_runner
+     # container:
+     #    image: vinod99998888/java-v17.0.9-maven-v3.8.6:latest
+     steps:
+       - uses: actions/checkout@v4 
+       - run: |
+           touch vinod.txt
+           ls -l
+           touch m1.txt
+           ls -l "$GITHUB_WORKSPACE"
+
+  test:
+     runs-on: github_runner
+     # container:
+     #    image: vinod99998888/java-v17.0.9-maven-v3.8.6:latest
+     needs: build
+     steps:
+       - uses: actions/checkout@v4   
+       - run: |
+           ls -l
+          
