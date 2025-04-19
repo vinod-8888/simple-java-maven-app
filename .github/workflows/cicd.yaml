@@ -9,7 +9,7 @@ on:  #Trigger pipeline when there is push and pull request happens
 jobs:
   test:  #Test job which will execute unit test cases
      name: run test cases
-     runs-on: ubuntu-latest
+     runs-on: ubuntu-latest  #In this runner our job will execute
      steps:
         - name: checkout code 
           uses: actions/checkout@v4 #Checkout source code
