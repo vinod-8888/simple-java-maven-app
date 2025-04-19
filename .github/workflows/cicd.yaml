@@ -33,6 +33,7 @@ jobs:
 
         - name: run unit test cases
           run: |
+             java --version && mvn --version
              mvn clean test
              ls -l "$GITHUB_WORKSPACE"
 
