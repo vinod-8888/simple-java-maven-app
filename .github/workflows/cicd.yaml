@@ -56,17 +56,14 @@ jobs:
        
        - name: build that maven application
          run: |
-             java --version
-             mvn --version
              mvn clean package -DskipTests
-             ls -l target
-             ls -l "$GITHUB_WORKSPACE"
+          
 
        - name: upload artifacts
          uses: actions/upload-artifact@v4
          with:
             name: warfile
-            path: target/classes
+            path: target/my-app-1.0-SNAPSHOT.jar
             retention-days: 1       
           
           
