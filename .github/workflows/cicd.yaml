@@ -52,12 +52,26 @@ jobs:
      needs: test
      steps:
        - name: checkout code 
-         uses: actions/checkout@v4   
+         uses: actions/checkout@v4  
+
+       - name: Set up Java 17
+         uses: actions/setup-java@v3
+         with:
+            distribution: 'temurin' 
+            java-version: '17'  
+
+       - name: Install Maven 3.9.3
+         run: |
+            MAVEN_VERSION=3.9.3
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o maven.tar.gz
+            tar -xzf maven.tar.gz
+            sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
+            echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
+            echo "/opt/maven/bin" >> $GITHUB_PATH    
        
-       - name: build that maven application
+       - name: build that application using maven
          run: |
              mvn clean package -DskipTests
-          
 
        - name: upload artifacts
          uses: actions/upload-artifact@v4
