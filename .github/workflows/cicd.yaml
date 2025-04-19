@@ -46,7 +46,7 @@ jobs:
        - name: upload artifacts
          uses: actions/upload-artifact@v4
          with:
-            name: warfile
+            name: jar-file
             path: ./target/
             retention-days: 1   
 
