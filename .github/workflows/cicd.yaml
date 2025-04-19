@@ -35,13 +35,13 @@ jobs:
           run: |
              java --version && mvn --version
              mvn clean test
-             ls -l target
+             
 
         - name: upload artifacts
           uses: actions/upload-artifact@v4
           with:
-            name: classes
-            path: target/classes
+            name: surefire-reports
+            path: target/surefire-reports/*.xml
             retention-days: 1  
 
   build:
