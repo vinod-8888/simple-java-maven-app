@@ -111,7 +111,7 @@ jobs:
         - name: execute jar file 
           run: |
              ls -l         
-             sh jenkins/scripts/deliver.sh 
+             #sh jenkins/scripts/deliver.sh 
               
           
           
