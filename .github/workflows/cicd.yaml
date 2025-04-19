@@ -8,7 +8,7 @@ on:  #Trigger pipeline when there is push and pull request happens
         
 jobs:
   build:  #build job which will package our application as jar file
-     name: build the maven application
+     name: Build
      runs-on: ubuntu-latest
      steps:
        - name: checkout code 
@@ -41,7 +41,7 @@ jobs:
             retention-days: 1 
 
   test:  #Test job which will execute unit test cases
-     name: run test cases
+     name: Tests
      needs:
         - build
      runs-on: ubuntu-latest  #In this runner our job will execute
@@ -78,7 +78,7 @@ jobs:
             retention-days: 1                
 
   deliver:   # in this stage we will execute our jar file
-     name: run jar file 
+     name: Deliver
      needs:
         - test
         - build
