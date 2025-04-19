@@ -10,7 +10,6 @@ jobs:
   build:  #build job which will package our application as jar file
      name: build the maven application
      runs-on: ubuntu-latest
-     needs: test
      steps:
        - name: checkout code 
          uses: actions/checkout@v4  
@@ -43,6 +42,8 @@ jobs:
 
   test:  #Test job which will execute unit test cases
      name: run test cases
+     needs:
+        - build
      runs-on: ubuntu-latest  #In this runner our job will execute
      steps:
         - name: checkout code 
