@@ -35,11 +35,14 @@ jobs:
           run: |
              java --version && mvn --version
              mvn clean test
-             ls -l "$GITHUB_WORKSPACE"
+             ls -l target
 
         - name: upload artifacts
-          run: |
-              ls -l     
+          uses: actions/upload-artifact@v4
+          with:
+            name: classes
+            path: target/classes
+            retention-days: 1  
 
   build:
      name: build the maven application
@@ -56,7 +59,15 @@ jobs:
              java --version
              mvn --version
              mvn clean package -DskipTests
+             ls -l target
              ls -l "$GITHUB_WORKSPACE"
+
+       - name: upload artifacts
+         uses: actions/upload-artifact@v4
+         with:
+            name: warfile
+            path: target/classes
+            retention-days: 1       
           
           
        
