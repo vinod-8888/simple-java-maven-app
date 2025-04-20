@@ -11,16 +11,16 @@ jobs:
      name: Build
      runs-on: ubuntu-latest
      steps:
-       - name: checkout code 
+       - name: checkout code   #Checkout source code from github
          uses: actions/checkout@v4  
 
-       - name: Set up Java 17
+       - name: Set up Java 17    #Install java 17
          uses: actions/setup-java@v3
          with:
             distribution: 'temurin' 
             java-version: '17'  
 
-       - name: Install Maven 3.9.3
+       - name: Install Maven 3.9.3   #Install maven 3.9.3
          run: |
             MAVEN_VERSION=3.9.3
             curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o maven.tar.gz
