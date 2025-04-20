@@ -37,7 +37,7 @@ jobs:
          uses: actions/upload-artifact@v4
          with:
             name: jar-file
-            path: ./target/
+            path: ./target/my-app-1.0-SNAPSHOT.jar
             retention-days: 1 
 
   test:  #Test job which will execute unit test cases
