@@ -9,6 +9,8 @@ on:
 jobs:
   build:
      name: Build
+     needs:
+       - test
      runs-on: ubuntu-latest
      container:
         image: vinod99998888/java-v17.0.9-maven-v3.9.3:latest
@@ -31,8 +33,6 @@ jobs:
   test:
      name: Test
      runs-on: ubuntu-latest
-     needs:
-       - build
      container:
           image: vinod99998888/java-v17.0.9-maven-v3.9.3:latest
      steps:    
