@@ -7,9 +7,111 @@ on:  #Trigger pipeline when there is push and pull request happens
  workflow_dispatch:  #using this we can trigger pipeline manually in UI
         
 jobs:
-  build:  #build job which will package our application as jar file
+  # build:  #build job which will package our application as jar file
+  #    name: Build
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: checkout code   #Checkout source code from github
+  #        uses: actions/checkout@v4  
+
+  #      - name: Set up Java 17    #Install java 17
+  #        uses: actions/setup-java@v3
+  #        with:
+  #           distribution: 'temurin' 
+  #           java-version: '17'  
+
+  #      - name: Install Maven 3.9.3   #Install maven 3.9.3
+  #        run: |
+  #           MAVEN_VERSION=3.9.3
+  #           curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o maven.tar.gz
+  #           tar -xzf maven.tar.gz
+  #           sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
+  #           echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
+  #           echo "/opt/maven/bin" >> $GITHUB_PATH    
+       
+  #      - name: build that application using maven
+  #        run: |
+  #            mvn clean package -DskipTests
+
+  #      - name: upload artifacts   #upload target folder as artifact so we can use in the further stages
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #           name: jar-file
+  #           path: ./target/
+  #           retention-days: 1 
+
+  # test:  #Test job which will execute unit test cases
+  #    name: Tests
+  #    needs:
+  #       - build
+  #    runs-on: ubuntu-latest  #In this runner our job will execute
+  #    steps:
+  #       - name: checkout code 
+  #         uses: actions/checkout@v4 #Checkout source code
+
+  #       - name: Set up Java 17
+  #         uses: actions/setup-java@v3  #install java 17
+  #         with:
+  #           distribution: 'temurin' 
+  #           java-version: '17'  
+
+  #       - name: Install Maven 3.9.3  #install maven 3.9.3
+  #         run: |
+  #           MAVEN_VERSION=3.9.3
+  #           curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o maven.tar.gz
+  #           tar -xzf maven.tar.gz
+  #           sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
+  #           echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
+  #           echo "/opt/maven/bin" >> $GITHUB_PATH    
+
+  #       - name: run unit test cases  #run test caes
+  #         run: |
+  #            java --version && mvn --version
+  #            mvn clean test  
+             
+
+  #       - name: upload artifacts   #upload artifacts 
+  #         uses: actions/upload-artifact@v4
+  #         with:
+  #           name: surefire-reports
+  #           path: target/surefire-reports/*.xml
+  #           retention-days: 1                
+
+  # deliver:   # in this stage we will execute our jar file
+  #    name: Deliver
+  #    needs:
+  #       - test
+  #       - build
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #       - name: checkout code 
+  #         uses: actions/checkout@v4 
+
+  #       - name: Set up Java 17
+  #         uses: actions/setup-java@v3
+  #         with:
+  #           distribution: 'temurin' 
+  #           java-version: '17'  
+
+  #       - name: Download artifacts from build job   #Download artifacts from build stage
+  #         uses: actions/download-artifact@v4
+  #         with: 
+  #            name: jar-file
+  #            path: ./target
+
+  #       - name: execute jar file    #Executing jar file it will print Hello World
+  #         run: |
+  #            ls -l         
+  #            sh jenkins/scripts/deliver.sh 
+    build:  #build job which will package our application as jar file
      name: Build
      runs-on: ubuntu-latest
+     permissions: 
+       id-token: write
+       contents: read
+     strategy:
+       matrix:
+           app: [ modeler, segmenter ]  
      steps:
        - name: checkout code   #Checkout source code from github
          uses: actions/checkout@v4  
@@ -28,81 +130,21 @@ jobs:
             sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
             echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
             echo "/opt/maven/bin" >> $GITHUB_PATH    
-       
-       - name: build that application using maven
+
+       - name: echo
          run: |
-             mvn clean package -DskipTests
+              echo "${{ matrix.app }}"
+       
+       # - name: build that application using maven
+       #   run: |
+       #       mvn clean package -DskipTests
 
-       - name: upload artifacts   #upload target folder as artifact so we can use in the further stages
-         uses: actions/upload-artifact@v4
-         with:
-            name: jar-file
-            path: ./target/
-            retention-days: 1 
-
-  test:  #Test job which will execute unit test cases
-     name: Tests
-     needs:
-        - build
-     runs-on: ubuntu-latest  #In this runner our job will execute
-     steps:
-        - name: checkout code 
-          uses: actions/checkout@v4 #Checkout source code
-
-        - name: Set up Java 17
-          uses: actions/setup-java@v3  #install java 17
-          with:
-            distribution: 'temurin' 
-            java-version: '17'  
-
-        - name: Install Maven 3.9.3  #install maven 3.9.3
-          run: |
-            MAVEN_VERSION=3.9.3
-            curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o maven.tar.gz
-            tar -xzf maven.tar.gz
-            sudo mv apache-maven-${MAVEN_VERSION} /opt/maven
-            echo "MAVEN_HOME=/opt/maven" >> $GITHUB_ENV
-            echo "/opt/maven/bin" >> $GITHUB_PATH    
-
-        - name: run unit test cases  #run test caes
-          run: |
-             java --version && mvn --version
-             mvn clean test  
-             
-
-        - name: upload artifacts   #upload artifacts 
-          uses: actions/upload-artifact@v4
-          with:
-            name: surefire-reports
-            path: target/surefire-reports/*.xml
-            retention-days: 1                
-
-  deliver:   # in this stage we will execute our jar file
-     name: Deliver
-     needs:
-        - test
-        - build
-     runs-on: ubuntu-latest
-     steps:
-        - name: checkout code 
-          uses: actions/checkout@v4 
-
-        - name: Set up Java 17
-          uses: actions/setup-java@v3
-          with:
-            distribution: 'temurin' 
-            java-version: '17'  
-
-        - name: Download artifacts from build job   #Download artifacts from build stage
-          uses: actions/download-artifact@v4
-          with: 
-             name: jar-file
-             path: ./target
-
-        - name: execute jar file    #Executing jar file it will print Hello World
-          run: |
-             ls -l         
-             sh jenkins/scripts/deliver.sh 
+       # - name: upload artifacts   #upload target folder as artifact so we can use in the further stages
+       #   uses: actions/upload-artifact@v4
+       #   with:
+       #      name: jar-file
+       #      path: ./target/
+       #      retention-days: 1 
               
           
           
