@@ -104,7 +104,7 @@ jobs:
   #            ls -l         
   #            sh jenkins/scripts/deliver.sh 
     build:  #build job which will package our application as jar file
-     name: Build
+     name: build jars for ${{ matrix.app }}
      runs-on: ubuntu-latest
      permissions: 
        id-token: write
